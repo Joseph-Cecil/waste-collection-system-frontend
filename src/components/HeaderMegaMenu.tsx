@@ -98,7 +98,7 @@ export function HeaderMegaMenu() {
           <h3>Logo</h3>
 
           <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="#" className={classes.link}>
+            <a href="#" className={classes.link} style={{color:"black"}}>
               Home
             </a>
             <HoverCard
@@ -109,7 +109,7 @@ export function HeaderMegaMenu() {
               withinPortal
             >
               <HoverCard.Target>
-                <a href="#" className={classes.link}>
+                <a href="#" className={classes.link} style={{color:"black"}}>
                   <Center inline>
                     <Box component="span" mr={5}>
                       Features
@@ -151,10 +151,10 @@ export function HeaderMegaMenu() {
                 </div>
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href="#" className={classes.link}>
+            <a href="#" className={classes.link} style={{color:"black"}}>
               Learn
             </a>
-            <a href="#" className={classes.link}>
+            <a href="#" className={classes.link} style={{color:"black"}}>
               Academy
             </a>
           </Group>
@@ -165,6 +165,7 @@ export function HeaderMegaMenu() {
           </Group>
 
           <Burger
+          color="black"
             opened={drawerOpened}
             onClick={toggleDrawer}
             hiddenFrom="sm"
@@ -215,14 +216,15 @@ export function HeaderMegaMenu() {
           </Group>
         </ScrollArea>
       </Drawer>
-<div >
+
       <img
         src="https://th.bing.com/th/id/R.ed779da807845ab730a240c5cb9215cf?rik=swa%2fbkQzWLDL%2fg&pid=ImgRaw&r=0"
         alt="Background"
         className={classes.backgroundImage}
       />
-      <div className="overlay-content"></div>
-      </div>
+        <Button size="lg" color="black" className={classes.centerButton}>Get Started</Button>
+      
+  
     </Box>
   );
 }
