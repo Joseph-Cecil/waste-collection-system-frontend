@@ -16,8 +16,6 @@ import {
   ScrollArea,
   rem,
   useMantineTheme,
-  Paper,
-  BackgroundImage,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -30,6 +28,9 @@ import {
   IconChevronDown,
 } from "@tabler/icons-react";
 import classes from "./HeaderMegaMenu.module.css";
+import { Link } from "react-router-dom";
+import LightAndDarkTheme from "./LightAndDarkTheme";
+import { HeroImageBackground } from "./HeroBackgroundImage";
 
 const mockdata = [
   {
@@ -92,13 +93,13 @@ export function HeaderMegaMenu() {
   ));
 
   return (
-    <Box  pb={120}>
+    <Box mb={-120}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <h3>Logo</h3>
+        <LightAndDarkTheme/>
 
           <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="#" className={classes.link} style={{color:"black"}}>
+            <a href="#" className={classes.link}>
               Home
             </a>
             <HoverCard
@@ -109,17 +110,13 @@ export function HeaderMegaMenu() {
               withinPortal
             >
               <HoverCard.Target>
-                <a href="#" className={classes.link} style={{color:"black"}}>
+                <Link to="/contact" className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
-                      Features
+                      Contact 
                     </Box>
-                    <IconChevronDown
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.blue[6]}
-                    />
                   </Center>
-                </a>
+                </Link>
               </HoverCard.Target>
 
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
@@ -151,21 +148,22 @@ export function HeaderMegaMenu() {
                 </div>
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href="#" className={classes.link} style={{color:"black"}}>
+            <a href="#" className={classes.link}>
               Learn
             </a>
-            <a href="#" className={classes.link} style={{color:"black"}}>
+            <a href="#" className={classes.link}>
               Academy
             </a>
+            
           </Group>
 
           <Group visibleFrom="sm">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            <Link to="/auth"><Button variant="default">Log in</Button></Link>
+           <Link to="/auth/register"> <Button>Sign up</Button></Link>
           </Group>
 
           <Burger
-          color="black"
+          
             opened={drawerOpened}
             onClick={toggleDrawer}
             hiddenFrom="sm"
@@ -210,19 +208,15 @@ export function HeaderMegaMenu() {
 
           <Divider my="sm" />
 
-          <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+          <Group justify="center" pb="xl" px="md">
+            <Link to="/auth"><Button variant="default">Log in</Button></Link>
+            
+           <Link to="/auth/register"> <Button>Sign up</Button></Link>
           </Group>
         </ScrollArea>
       </Drawer>
 
-      <img
-        src="https://th.bing.com/th/id/R.ed779da807845ab730a240c5cb9215cf?rik=swa%2fbkQzWLDL%2fg&pid=ImgRaw&r=0"
-        alt="Background"
-        className={classes.backgroundImage}
-      />
-        <Button size="lg" color="black" className={classes.centerButton}>Get Started</Button>
+        <HeroImageBackground/>
       
   
     </Box>

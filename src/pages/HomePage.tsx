@@ -1,9 +1,13 @@
-import { HeaderMegaMenu } from '../components/HeaderMegaMenu';
+import { FooterCentered } from "../components/FooterCentered";
+import { HeaderMegaMenu } from "../components/HeaderMegaMenu";
 
 const HomePage = () => {
   return (
-    <div><HeaderMegaMenu/></div>
-  )
-}
+    <>
+      <HeaderMegaMenu />
+      <FooterCentered/>
+    </>
+  );
+};
 
-export default HomePage
+export default HomePage;
