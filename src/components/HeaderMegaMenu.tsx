@@ -91,6 +91,12 @@ export function HeaderMegaMenu() {
             <a href="/contact" className={classes.link}>
               Contact Us
             </a>
+            <a href="/about" className={classes.link}>
+              About Us
+            </a>
+            <a href="/vision" className={classes.link}>
+              Our Vision
+            </a>
 
             <Divider my="sm" />
             <Group justify="center" pb="xl" px="md">
