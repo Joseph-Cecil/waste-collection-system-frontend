@@ -1,20 +1,27 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import AuthenticationPage from "./pages/AuthenticationPage";
 import ContactUsPage from "./pages/ContactUsPage";
+import LearnPage from "./pages/AboutUs.tsx";
+import AcademyPage from "./pages/OurVision.tsx";
+import AuthenticationPage from "./pages/AuthenticationPage.tsx";
+import Layout from "./Layout/Layout.tsx";
+import ClientDashboard from "./pages/ClientDashboard.tsx";
 
-const AppRoutes = () => {
-  
+function App() {
   return (
-    <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<HomePage/>}/>
-      <Route path="/auth" element={<AuthenticationPage/>} />
-      <Route path="/auth/register" element={<AuthenticationPage/>} />
-      <Route path="/contact" element={<ContactUsPage/>} />
-    </Routes>
-    </BrowserRouter>
-  )
+    
+      <Routes>
+        <Route path="/" element={<Layout/>}>
+        <Route index element={<HomePage />} />
+        <Route path="/contact" element={<ContactUsPage />} />
+        <Route path="/learn" element={<LearnPage />} />
+        <Route path="/academy" element={<AcademyPage />} />
+        <Route path="/auth" element={<AuthenticationPage />} />
+        <Route path="/auth/register" element={<AuthenticationPage />} />
+        <Route path="/auth/client-dashboard" element={<ClientDashboard/>} />
+        </Route>
+      </Routes>
+  );
 }
 
-export default AppRoutes
+export default App;

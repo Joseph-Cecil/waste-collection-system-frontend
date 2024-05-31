@@ -1,11 +1,19 @@
-import { FooterCentered } from "../components/FooterCentered";
-import { HeaderMegaMenu } from "../components/HeaderMegaMenu";
+
+import { FaqSimple } from "../components/FaqSimple";
+import { HeroImageBackground } from "../components/HeroBackgroundImage";
+import AboutUs from "./AboutUs";
+import JoinUs from "./JoinUs";
+import OurVision from "./OurVision";
 
 const HomePage = () => {
   return (
     <>
-      <HeaderMegaMenu />
-      <FooterCentered/>
+      
+      <HeroImageBackground/>
+      <AboutUs/>
+      <OurVision/>
+      <JoinUs/>
+      <FaqSimple/>
     </>
   );
 };

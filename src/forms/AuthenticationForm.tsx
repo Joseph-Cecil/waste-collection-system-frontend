@@ -15,7 +15,11 @@ import {
   Stack,
 } from "@mantine/core";
 
-export function AuthenticationForm(props: PaperProps) {
+interface AuthenticationFormProps extends PaperProps {
+  path: string;
+}
+
+export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) {
   const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
@@ -38,13 +42,15 @@ export function AuthenticationForm(props: PaperProps) {
   });
 
   useEffect(() => {
-    if (window.location.pathname.includes("register")) {
+    if (path.includes("register")) {
       toggle("register");
+    } else {
+      toggle("login");
     }
-  }, []);
+  }, [path, toggle]);
 
   return (
-    <Paper radius="md" p="xl" withBorder {...props}>
+    <Paper mt={100} radius="md" p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
         Welcome to Eco-Cycle, {type} with
       </Text>

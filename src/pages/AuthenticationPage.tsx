@@ -1,12 +1,15 @@
-import { AuthenticationForm } from "../forms/AuthenticationForm"
+import React from "react";
+import { useLocation } from "react-router-dom";
+import { AuthenticationForm } from "../forms/AuthenticationForm";
 
+function AuthenticationPage() {
+  const location = useLocation();
 
-const AuthenticationPage = () => {
   return (
     <div>
-      <AuthenticationForm/>
+      <AuthenticationForm path={location.pathname} />
     </div>
-  )
+  );
 }
 
-export default AuthenticationPage
+export default AuthenticationPage;

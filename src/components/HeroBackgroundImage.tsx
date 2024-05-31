@@ -1,5 +1,6 @@
 import { Title, Text, Container, Button, Overlay } from "@mantine/core";
 import classes from "./HeroImageBackground.module.css";
+import { Link } from "react-router-dom";
 
 export function HeroImageBackground() {
   return (
@@ -17,7 +18,7 @@ export function HeroImageBackground() {
           </Title>
 
           <Container size={640}>
-            <Text size="lg" className={classes.description}>
+            <Text size="lg" color="white" className={classes.description}>
               Welcome to <b>EcoCycle</b>, where we transform the way you handle
               waste. Our cutting-edge technology ensures efficient and
               eco-friendly waste collection, making our cities cleaner and
@@ -27,55 +28,16 @@ export function HeroImageBackground() {
           </Container>
 
           <div className={classes.controls}>
+            <Link to="/auth/client-dashboard">
             <Button className={classes.control} variant="white" size="lg">
               Get started
             </Button>
+            </Link>
           </div>
         </div>
       </div>
-      <div
-        className={classes.wrapperone}
-        style={{ backgroundColor: "#404040" }}
-      >
-        <Title className={classes.title}>About Us</Title>
-
-        <Container size={640}>
-          <Text size="lg" className={classes.description}>
-            Welcome to EcoCycle, a pioneer in smart waste management solutions.
-            Our mission is to revolutionize the way waste is collected,
-            processed, and recycled, making our communities cleaner, greener,
-            and more sustainable. At EcoCycle, we believe that innovative
-            technology can transform waste management, leading to a significant
-            positive impact on our environment and quality of life.
-          </Text>
-        </Container>
-      </div>
-      <div className={classes.wrappervision}>
-        <Title className={classes.title}>Our Vision</Title>
-
-        <Container size={640}>
-          <Text size="lg" className={classes.description}>
-            We envision a world where waste is efficiently managed, resources
-            are conserved, and communities thrive in a clean and healthy
-            environment. Our goal is to reduce landfill waste, promote
-            recycling, and minimize pollution through intelligent and automated
-            waste collection systems.{" "}
-          </Text>
-        </Container>
-      </div>
-      <div className={classes.wrapperjoinus}>
-        <Title className={classes.title}>Join Us</Title>
-
-        <Container size={640}>
-          <Text size="lg" className={classes.description}>
-            We invite you to join us on our journey towards a cleaner and more
-            sustainable future. Whether you are a city official, a business
-            owner, or a resident, EcoCycle has the solutions to meet your waste
-            management needs. Together, we can make a difference and build a
-            better tomorrow.
-          </Text>
-        </Container>
-      </div>
+     
+     
     </>
   );
 }

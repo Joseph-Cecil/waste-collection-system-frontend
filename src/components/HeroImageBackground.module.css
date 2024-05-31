@@ -1,6 +1,6 @@
 .wrapper {
   position: relative;
-  padding-top: rem(180px);
+  padding-top: rem(360px);
   padding-bottom: rem(130px);
   background-image: url(https://th.bing.com/th/id/OIP.jizyrLTEStapCrhuHIWyYQHaE8?rs=1&pid=ImgDetMain);
   background-size: cover;
@@ -14,7 +14,7 @@
 
 .wrapperone {
   position: relative;
-  padding-top: rem(180px);
+  padding-top: rem(360px);
   padding-bottom: rem(130px);
   background-image: url(https://th.bing.com/th/id/R.6e624583260741e0f106493b726b80fa?rik=0owM2y17YkJU2A&pid=ImgRaw&r=0);
   background-size: cover;
