@@ -45,10 +45,10 @@ export function ActionsGrid() {
       navigate("/auth/cancel-request");
     } else if (title === "Last Take Out") {
       navigate("/auth/last-take-out");
-    } else if (title === "reciepts") {
-      navigate("/reciepts");
-    } else if (title === "All Request") {
-      navigate("/auth/all-request");
+    } else if (title === "Receipts") {
+      navigate("/auth/receipts");
+    } else if (title === "All Requests") {
+      navigate("/auth/all-requests");
     } else if (title === "Payment") {
       navigate("/auth/payment");
     } else if (title === "Special Request Status") {

@@ -11,6 +11,10 @@ import {TakeOutsTable} from "./components/ClientDashboard/TakeOutsTable.tsx";
 import { CancelRequest } from "./components/ClientDashboard/CancelRequest.tsx";
 import AboutUs from "./pages/AboutUs.tsx";
 import OurVision from "./pages/OurVision.tsx";
+import { AllRequests } from "./components/ClientDashboard/AllRequests.tsx";
+import { Receipts } from "./components/ClientDashboard/Receipts.tsx";
+import { Payment } from "./components/ClientDashboard/Payment.tsx";
+import { LastTakeOut } from "./components/ClientDashboard/LastTakeOut.tsx";
 
 function App() {
   return (
@@ -29,6 +33,10 @@ function App() {
         <Route path="/auth/special-takeout-status" element={<SpecialTakeoutStatus/>} />
         <Route path="/auth/take-outs" element={<TakeOutsTable/>}/>
         <Route path="/auth/cancel-request" element={<CancelRequest/>} />
+        <Route path="/auth/all-requests" element={<AllRequests/>}/>
+        <Route path="/auth/receipts" element={<Receipts/>} />
+        <Route path="/auth/payment" element={<Payment/>}/>
+        <Route path="/auth/last-take-out" element={<LastTakeOut/>} />
         </Route>
       </Routes>
   );

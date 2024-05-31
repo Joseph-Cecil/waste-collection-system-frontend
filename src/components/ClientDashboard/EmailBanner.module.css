@@ -1,5 +1,6 @@
 .wrapper {
     display: flex;
+    margin: 1rem;
     align-items: center;
     padding: calc(var(--mantine-spacing-xl) * 2);
     border-radius: var(--mantine-radius-md);
