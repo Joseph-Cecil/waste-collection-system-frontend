@@ -41,7 +41,7 @@ export function ActionsGrid() {
       navigate("/auth/my-profile");
     } else if (title === "Special Request") {
       navigate("/auth/special-takeout");
-    } else if (title === "Cancel-Request") {
+    } else if (title === "Cancel Request") {
       navigate("/auth/cancel-request");
     } else if (title === "Last Take Out") {
       navigate("/auth/last-take-out");

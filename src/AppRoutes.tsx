@@ -10,6 +10,7 @@ import UpdateForm from "./components/ClientDashboard/UpdateForm.tsx";
 import SpecialRequest from "./components/SpecialRequest.tsx";
 import SpecialTakeoutStatus from "./components/SpecialTakeoutStatus.tsx";
 import {TakeOutsTable} from "./components/ClientDashboard/TakeOutsTable.tsx";
+import { CancelRequest } from "./components/ClientDashboard/CancelRequest.tsx";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/auth/special-takeout" element={<SpecialRequest/>}/>
         <Route path="/auth/special-takeout-status" element={<SpecialTakeoutStatus/>} />
         <Route path="/auth/take-outs" element={<TakeOutsTable/>}/>
+        <Route path="/auth/cancel-request" element={<CancelRequest/>} />
         </Route>
       </Routes>
   );
