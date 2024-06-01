@@ -15,6 +15,7 @@ import { AllRequests } from "./components/ClientDashboard/AllRequests.tsx";
 import { Receipts } from "./components/ClientDashboard/Receipts.tsx";
 import { Payment } from "./components/ClientDashboard/Payment.tsx";
 import { LastTakeOut } from "./components/ClientDashboard/LastTakeOut.tsx";
+import ProtectedRoute from "./components/auth.tsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/about" element={<AboutUs />} />
         <Route path="/vision" element={<OurVision />} />
+        <Route element={<ProtectedRoute/>}>
         <Route path="/auth" element={<AuthenticationPage />} />
         <Route path="/auth/register" element={<AuthenticationPage />} />
         <Route path="/auth/client-dashboard" element={<ClientDashboard/>} />
@@ -37,6 +39,7 @@ function App() {
         <Route path="/auth/receipts" element={<Receipts/>} />
         <Route path="/auth/payment" element={<Payment/>}/>
         <Route path="/auth/last-take-out" element={<LastTakeOut/>} />
+        </Route>
         </Route>
       </Routes>
   );

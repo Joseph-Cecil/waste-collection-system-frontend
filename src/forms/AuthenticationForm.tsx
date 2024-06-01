@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 import {
@@ -20,7 +20,8 @@ interface AuthenticationFormProps extends PaperProps {
 }
 
 export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) {
-  const [type, toggle] = useToggle(["login", "register"]);
+  const [type, setType] = useState<"login" | "register">("login");
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulating logged-in state
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -42,12 +43,30 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
   });
 
   useEffect(() => {
-    if (path.includes("register")) {
-      toggle("register");
+    // Simulate checking if user is logged in using JWT token
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      setIsLoggedIn(true);
     } else {
-      toggle("login");
+      setIsLoggedIn(false);
     }
-  }, [path, toggle]);
+
+    if (path.includes("register")) {
+      setType("register");
+    } else {
+      setType("login");
+    }
+  }, [path]);
+
+  const handleSignOut = () => {
+    // Simulate signing out by removing dummy JWT token from localStorage
+    localStorage.removeItem("jwtToken");
+    setIsLoggedIn(false);
+  };
+
+  const handleToggle = () => {
+    setType(type === "login" ? "register" : "login");
+  };
 
   return (
     <Paper mt={100} radius="md" p="xl" withBorder {...props}>
@@ -139,15 +158,15 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
             component="button"
             type="button"
             c="dimmed"
-            onClick={() => toggle()}
+            onClick={handleToggle}
             size="xs"
           >
             {type === "register"
               ? "Already have an account? Login"
               : "Don't have an account? Register"}
           </Anchor>
-          <Button type="submit" radius="xl">
-            {upperFirst(type)}
+          <Button type="submit" radius="xl" onClick={isLoggedIn ? handleSignOut : undefined}>
+            {isLoggedIn ? "Sign Out" : upperFirst(type)}
           </Button>
         </Group>
       </form>

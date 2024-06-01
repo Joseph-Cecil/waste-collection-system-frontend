@@ -1,4 +1,4 @@
-import { Button, Paper, Text, Group, CloseButton } from '@mantine/core';
+import { Button, Paper, Text, Group } from '@mantine/core';
 
 export function LastTakeOut() {
   return (
