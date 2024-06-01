@@ -1,96 +1,70 @@
-import {  Button, Divider, Group, Paper, PaperProps, Stack, Text, TextInput } from '@mantine/core'
-import { useForm } from '@mantine/form';
+import { Container, Divider, Group, Loader, Paper, Text } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import api from '../../services/api';
 
-
-interface UpdateForm extends PaperProps {
-    path: string;
-  }
+interface TrashData {
+  id: number;
+  user: {
+    username: string;
+    email: string;
+  };
+  contact: string;
+  location: string;
+  is_delivered: boolean;
+  take_out_date: string;
+  updated_at: string;
+}
 
 const UpdateForm = () => {
+  const [trashs, setTrash] = useState<TrashData[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const form = useForm({
-    initialValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      name: "",
-      password: "",
-      terms: true,
-    },
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.getAllTrashOrder();
+        setTrash(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    validate: {
-      email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
-      password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
-    },
-  });
+    fetchData();
+  }, []);
 
+  if (loading) {
+    return (
+      <Container my="md">
+        <Loader />
+        <Text>Loading...</Text>
+      </Container>
+    );
+  }
 
+  const lastTrash = trashs[trashs.length - 1]; // Get the last trash item
 
   return (
     <>
-     <Paper mt={100} mb={60} radius="md" p="xl" withBorder>
-      <Text size="lg" fw={500}>
-        Welcome to Eco-Cycle
-      </Text>
+      <Paper mt={100} mb={60} radius="md" p="xl" withBorder>
+        <Text size="lg" fw={500}>
+          Welcome to Eco-Cycle
+        </Text>
 
-      <Divider labelPosition="center" my="lg" />
+        <Divider labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
-        <Stack>
-        
-            <>
-              <TextInput
-                
-                label="First Name"
-                placeholder="Enter Your First Name Here"
-                value={form.values.firstName}
-                onChange={(event) =>
-                  form.setFieldValue("firstName", event.currentTarget.value)
-                }
-                radius="md"
-              />
+        <Group>
+          <Text>Username: {lastTrash.user.username}</Text>
 
-              <TextInput
-                
-                label="Last Name"
-                placeholder="Enter Your Last Name Here"
-                value={form.values.lastName}
-                onChange={(event) =>
-                  form.setFieldValue("lastName", event.currentTarget.value)
-                }
-                radius="md"
-              />
+        </Group>
 
-              <TextInput
-               
-                label="Phone Number"
-                placeholder="Enter Your Phone Number Here"
-                value={form.values.phoneNumber}
-                onChange={(event) =>
-                  form.setFieldValue("phoneNumber", event.currentTarget.value)
-                }
-                radius="md"
-              />
-            </>
-          <Group>
-            <Button type="submit" radius="xl">
-            Update
-          </Button>
-          </Group>
-         
-        </Stack>
-
-      </form>
-    </Paper>
+        <Group>
+        <Text style={{ whiteSpace: 'pre-wrap' }}>Email: {lastTrash.user.email}</Text>
+        </Group>
+      </Paper>
     </>
   );
+};
 
-   
-  
-}
-
-export default UpdateForm
+export default UpdateForm;

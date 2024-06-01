@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
+import  api  from "../services/api";
 import {
   TextInput,
   PasswordInput,
@@ -12,8 +13,9 @@ import {
   Divider,
   Checkbox,
   Anchor,
-  Stack,
+  Stack
 } from "@mantine/core";
+import { useNavigate } from "react-router-dom";
 
 interface AuthenticationFormProps extends PaperProps {
   path: string;
@@ -21,15 +23,12 @@ interface AuthenticationFormProps extends PaperProps {
 
 export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) {
   const [type, toggle] = useToggle(["login", "register"]);
+  const navigate = useNavigate();
   const form = useForm({
     initialValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
       email: "",
-      name: "",
+      username: "",
       password: "",
-      terms: true,
     },
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
@@ -37,7 +36,7 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
         val.length <= 6 ? "Password should include at least 6 characters" : null,
     },
   });
-  
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -53,19 +52,26 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
       // Call login API with form values
       try {
         // Replace the following with your login API call
-        const response = await login(form.values.email, form.values.password);
+        console.log(form.values.email, form.values.password);
+        await api.login({"email":form.values.email, "password":form.values.password});
+        // console.log("innnnnnnnn ",response)
         // Assuming successful login, update authentication state
         setIsLoggedIn(true);
+        navigate("/auth/client-dashboard")
       } catch (error) {
+
         console.error("Login failed:", error);
       }
+      console.log("successful")
     } else {
       // Call register API with form values
       try {
         // Replace the following with your register API call
-        const response = await register(form.values);
+        const response = await api.register(form.values);
+        console.log("Registering  ", response)
         // Assuming successful registration, update authentication state
-        setIsLoggedIn(true);
+        // setIsLoggedIn(true);
+        toggle("login");
       } catch (error) {
         console.error("Registration failed:", error);
       }
@@ -76,7 +82,9 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
     // Call logout API
     try {
       // Replace the following with your logout API call
-      await logout();
+      console.log("processing logout")
+      await api.logout();
+      console.log("LOgining out")
       // Assuming successful logout, update authentication state
       setIsLoggedIn(false);
     } catch (error) {
@@ -99,33 +107,11 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
               <>
                 <TextInput
                   required
-                  label="First Name"
-                  placeholder="Enter Your First Name Here"
-                  value={form.values.firstName}
+                  label="Username"
+                  placeholder="Enter Your Username Here"
+                  value={form.values.username}
                   onChange={(event) =>
-                    form.setFieldValue("firstName", event.currentTarget.value)
-                  }
-                  radius="md"
-                />
-
-                <TextInput
-                  required
-                  label="Last Name"
-                  placeholder="Enter Your Last Name Here"
-                  value={form.values.lastName}
-                  onChange={(event) =>
-                    form.setFieldValue("lastName", event.currentTarget.value)
-                  }
-                  radius="md"
-                />
-
-                <TextInput
-                  required
-                  label="Phone Number"
-                  placeholder="Enter Your Phone Number Here"
-                  value={form.values.phoneNumber}
-                  onChange={(event) =>
-                    form.setFieldValue("phoneNumber", event.currentTarget.value)
+                    form.setFieldValue("username", event.currentTarget.value)
                   }
                   radius="md"
                 />
@@ -162,7 +148,7 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
             {type === "register" && (
               <Checkbox
                 label="I accept terms and conditions"
-                checked={form.values.terms}
+                checked={true}
                 onChange={(event) =>
                   form.setFieldValue("terms", event.currentTarget.checked)
                 }

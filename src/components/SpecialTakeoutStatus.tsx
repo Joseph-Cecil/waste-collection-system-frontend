@@ -1,7 +1,51 @@
-import { ActionIcon, RingProgress, Text, Center, rem } from '@mantine/core';
+import { ActionIcon, RingProgress, Text, Center, rem, Container, Loader } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import api from '../services/api';
+
+// Define an interface for the trash data
+interface TrashData {
+  id: number;
+  user: {
+    username: string;
+  };
+  contact: string;
+  location: string;
+  is_delivered: boolean;
+  take_out_date: string;
+  updated_at: string;
+}
 
 const SpecialTakeoutStatus = () => {
+  const [trashs, setTrash] = useState<TrashData[]>([]); // Explicitly type trashs
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.getAllTrashOrder();
+        console.log('inside component', response)
+        setTrash(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container my="md">
+        <Loader />
+        <Text>Loading...</Text>
+      </Container>
+    );
+  }
+
+  const lastTrash = trashs[trashs.length - 1]; // Get the last item in the array
   return (
     <>
     <div style={{display:"flex", alignItems:"center", justifyContent:"center", marginTop:"40px",}}>
@@ -27,7 +71,7 @@ const SpecialTakeoutStatus = () => {
     />
 
 
-    <RingProgress
+   { lastTrash.is_delivered && <RingProgress
       sections={[{ value: 100, color: 'teal' }]}
       label={
         <Center>
@@ -37,7 +81,10 @@ const SpecialTakeoutStatus = () => {
         </Center>
       }
     />
+
+  }
   </div>
+
   </>
   )
 }
