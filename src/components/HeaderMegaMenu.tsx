@@ -9,20 +9,23 @@ import {
   Drawer,
   ScrollArea,
   rem,
+  useMantineTheme,
+  useMantineColorScheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-
 import { Link } from "react-router-dom";
 import classes from "./HeaderMegaMenu.module.css";
 import LightAndDarkTheme from "./LightAndDarkTheme";
 
-
-
 export function HeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
+  const theme = useMantineTheme();
+  const { colorScheme } = useMantineColorScheme();
 
-  
+  const linkStyles = {
+    color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
+  };
 
   return (
     <Box
@@ -33,7 +36,7 @@ export function HeaderMegaMenu() {
         <Group justify="space-between" h="100%">
           <LightAndDarkTheme />
           <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="/" className={classes.link}>
+            <a href="/" className={classes.link} style={linkStyles}>
               Home
             </a>
             <HoverCard
@@ -43,7 +46,7 @@ export function HeaderMegaMenu() {
               shadow="md"
               withinPortal
             >
-              <Link to="/contact" className={classes.link}>
+              <Link to="/contact" className={classes.link} style={linkStyles}>
                 <Center inline>
                   <Box component="span" mr={5}>
                     Contact
@@ -51,10 +54,10 @@ export function HeaderMegaMenu() {
                 </Center>
               </Link>
             </HoverCard>
-            <a href="/about" className={classes.link}>
+            <a href="/about" className={classes.link} style={linkStyles}>
               About Us
             </a>
-            <a href="/vision" className={classes.link}>
+            <a href="/vision" className={classes.link} style={linkStyles}>
               Our Vision
             </a>
           </Group>
@@ -85,16 +88,16 @@ export function HeaderMegaMenu() {
         >
           <ScrollArea h={`calc(100vh - ${rem(80)})`} mx="-md">
             <Divider my="sm" />
-            <a href="/" className={classes.link}>
+            <a href="/" className={classes.link} style={linkStyles}>
               Home
             </a>
-            <a href="/contact" className={classes.link}>
+            <a href="/contact" className={classes.link} style={linkStyles}>
               Contact Us
             </a>
-            <a href="/about" className={classes.link}>
+            <a href="/about" className={classes.link} style={linkStyles}>
               About Us
             </a>
-            <a href="/vision" className={classes.link}>
+            <a href="/vision" className={classes.link} style={linkStyles}>
               Our Vision
             </a>
 
