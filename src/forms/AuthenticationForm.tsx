@@ -20,8 +20,7 @@ interface AuthenticationFormProps extends PaperProps {
 }
 
 export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) {
-  const [type, setType] = useState<"login" | "register">("login");
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Simulating logged-in state
+  const [type, toggle] = useToggle(["login", "register"]);
   const form = useForm({
     initialValues: {
       firstName: "",
@@ -32,40 +31,57 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
       password: "",
       terms: true,
     },
-
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : "Invalid email"),
       password: (val) =>
-        val.length <= 6
-          ? "Password should include at least 6 characters"
-          : null,
+        val.length <= 6 ? "Password should include at least 6 characters" : null,
     },
   });
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Simulate checking if user is logged in using JWT token
-    const token = localStorage.getItem("jwtToken");
-    if (token) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
-
     if (path.includes("register")) {
-      setType("register");
+      toggle("register");
     } else {
-      setType("login");
+      toggle("login");
     }
-  }, [path]);
+  }, [path, toggle]);
 
-  const handleSignOut = () => {
-    // Simulate signing out by removing dummy JWT token from localStorage
-    localStorage.removeItem("jwtToken");
-    setIsLoggedIn(false);
+  const handleFormSubmit = async () => {
+    if (type === "login") {
+      // Call login API with form values
+      try {
+        // Replace the following with your login API call
+        const response = await login(form.values.email, form.values.password);
+        // Assuming successful login, update authentication state
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Login failed:", error);
+      }
+    } else {
+      // Call register API with form values
+      try {
+        // Replace the following with your register API call
+        const response = await register(form.values);
+        // Assuming successful registration, update authentication state
+        setIsLoggedIn(true);
+      } catch (error) {
+        console.error("Registration failed:", error);
+      }
+    }
   };
 
-  const handleToggle = () => {
-    setType(type === "login" ? "register" : "login");
+  const handleLogout = async () => {
+    // Call logout API
+    try {
+      // Replace the following with your logout API call
+      await logout();
+      // Assuming successful logout, update authentication state
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   return (
@@ -76,100 +92,108 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
 
       <Divider labelPosition="center" my="lg" />
 
-      <form onSubmit={form.onSubmit(() => {})}>
-        <Stack>
-          {type === "register" && (
-            <>
-              <TextInput
-                required
-                label="First Name"
-                placeholder="Enter Your First Name Here"
-                value={form.values.firstName}
-                onChange={(event) =>
-                  form.setFieldValue("firstName", event.currentTarget.value)
-                }
-                radius="md"
-              />
+      {!isLoggedIn && (
+        <form onSubmit={form.onSubmit(handleFormSubmit)}>
+          <Stack>
+            {type === "register" && (
+              <>
+                <TextInput
+                  required
+                  label="First Name"
+                  placeholder="Enter Your First Name Here"
+                  value={form.values.firstName}
+                  onChange={(event) =>
+                    form.setFieldValue("firstName", event.currentTarget.value)
+                  }
+                  radius="md"
+                />
 
-              <TextInput
-                required
-                label="Last Name"
-                placeholder="Enter Your Last Name Here"
-                value={form.values.lastName}
-                onChange={(event) =>
-                  form.setFieldValue("lastName", event.currentTarget.value)
-                }
-                radius="md"
-              />
+                <TextInput
+                  required
+                  label="Last Name"
+                  placeholder="Enter Your Last Name Here"
+                  value={form.values.lastName}
+                  onChange={(event) =>
+                    form.setFieldValue("lastName", event.currentTarget.value)
+                  }
+                  radius="md"
+                />
 
-              <TextInput
-                required
-                label="Phone Number"
-                placeholder="Enter Your Phone Number Here"
-                value={form.values.phoneNumber}
-                onChange={(event) =>
-                  form.setFieldValue("phoneNumber", event.currentTarget.value)
-                }
-                radius="md"
-              />
-            </>
-          )}
+                <TextInput
+                  required
+                  label="Phone Number"
+                  placeholder="Enter Your Phone Number Here"
+                  value={form.values.phoneNumber}
+                  onChange={(event) =>
+                    form.setFieldValue("phoneNumber", event.currentTarget.value)
+                  }
+                  radius="md"
+                />
+              </>
+            )}
 
-          <TextInput
-            required
-            label="Email"
-            placeholder="hello@mantine.dev"
-            value={form.values.email}
-            onChange={(event) =>
-              form.setFieldValue("email", event.currentTarget.value)
-            }
-            error={form.errors.email && "Invalid email"}
-            radius="md"
-          />
-
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            value={form.values.password}
-            onChange={(event) =>
-              form.setFieldValue("password", event.currentTarget.value)
-            }
-            error={
-              form.errors.password &&
-              "Password should include at least 6 characters"
-            }
-            radius="md"
-          />
-
-          {type === "register" && (
-            <Checkbox
-              label="I accept terms and conditions"
-              checked={form.values.terms}
+            <TextInput
+              required
+              label="Email"
+              placeholder="hello@mantine.dev"
+              value={form.values.email}
               onChange={(event) =>
-                form.setFieldValue("terms", event.currentTarget.checked)
+                form.setFieldValue("email", event.currentTarget.value)
               }
+              error={form.errors.email && "Invalid email"}
+              radius="md"
             />
-          )}
-        </Stack>
 
-        <Group justify="space-between" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            c="dimmed"
-            onClick={handleToggle}
-            size="xs"
-          >
-            {type === "register"
-              ? "Already have an account? Login"
-              : "Don't have an account? Register"}
-          </Anchor>
-          <Button type="submit" radius="xl" onClick={isLoggedIn ? handleSignOut : undefined}>
-            {isLoggedIn ? "Sign Out" : upperFirst(type)}
-          </Button>
-        </Group>
-      </form>
+            <PasswordInput
+              required
+              label="Password"
+              placeholder="Your password"
+              value={form.values.password}
+              onChange={(event) =>
+                form.setFieldValue("password", event.currentTarget.value)
+              }
+              error={
+                form.errors.password &&
+                "Password should include at least 6 characters"
+              }
+              radius="md"
+            />
+
+            {type === "register" && (
+              <Checkbox
+                label="I accept terms and conditions"
+                checked={form.values.terms}
+                onChange={(event) =>
+                  form.setFieldValue("terms", event.currentTarget.checked)
+                }
+              />
+            )}
+          </Stack>
+
+          <Group justify="space-between" mt="xl">
+            <Anchor
+              component="button"
+              type="button"
+              c="dimmed"
+              onClick={() => toggle()}
+              size="xs"
+            >
+              {type === "register"
+                ? "Already have an account? Login"
+                : "Don't have an account? Register"}
+            </Anchor>
+            <Button type="submit" radius="xl">
+              {upperFirst(type)}
+            </Button>
+          </Group>
+        </form>
+      )}
+
+      {isLoggedIn && (
+        <Button onClick={handleLogout} radius="xl">
+          Logout
+        </Button>
+      )}
     </Paper>
   );
 }
