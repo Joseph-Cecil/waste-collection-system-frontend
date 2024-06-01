@@ -2,28 +2,22 @@ import { Container, Divider, Group, Loader, Paper, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
 
-interface TrashData {
-  id: number;
-  user: {
+interface UserData {
+
     username: string;
     email: string;
-  };
-  contact: string;
-  location: string;
-  is_delivered: boolean;
-  take_out_date: string;
-  updated_at: string;
+
 }
 
 const UpdateForm = () => {
-  const [trashs, setTrash] = useState<TrashData[]>([]);
+  const [profile, setProfile] = useState<UserData>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await api.getAllTrashOrder();
-        setTrash(response);
+        const response = await api.getUserProfile();
+        setProfile(response);
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -43,7 +37,7 @@ const UpdateForm = () => {
     );
   }
 
-  const lastTrash = trashs[trashs.length - 1]; // Get the last trash item
+
 
   return (
     <>
@@ -55,12 +49,12 @@ const UpdateForm = () => {
         <Divider labelPosition="center" my="lg" />
 
         <Group>
-          <Text>Username: {lastTrash.user.username}</Text>
+          <Text>Username: {profile?.username}</Text>
 
         </Group>
 
         <Group>
-        <Text style={{ whiteSpace: 'pre-wrap' }}>Email: {lastTrash.user.email}</Text>
+        <Text style={{ whiteSpace: 'pre-wrap' }}>Email: {profile?.email}</Text>
         </Group>
       </Paper>
     </>

@@ -1,9 +1,11 @@
 import axios from "axios";
 
-const baseUrl = "http://127.0.0.1:8000/api";
+const baseUrl = "https://waste-management-api-tu9g.onrender.com/api";
+// const baseUrl = "http://127.0.0.1:8000/api";
 const registerUrl = `${baseUrl}/auth/register/`;
 const loginUrl = `${baseUrl}/auth/login/`;
 const logoutUrl = `${baseUrl}/auth/logout/`;
+const profileUrl = `${baseUrl}/auth/me/`
 const trashUrl = `${baseUrl}/trash/`;
 
 const register = async (credential: { email: string; username: string; password: string }) => {
@@ -114,4 +116,53 @@ const getAllTrashOrder = async () => {
     }
 };
 
-export default { register, login, logout, orderTrashTakeOut, getAllTrashOrder };
+
+const getUserProfile = async () => {
+    const access_token = localStorage.getItem('jwtToken');
+    console.log(access_token);
+
+    if (access_token) {
+        const config = {
+            headers: { Authorization: `Bearer ${access_token}` },
+        };
+
+        try {
+            const response = await axios.get(profileUrl, config);
+            console.log("Order response:", response);
+            return response.data;
+        } catch (error) {
+            console.error("Order failed:", error);
+            throw error;
+        }
+    } else {
+        console.error("No access token found");
+        throw new Error("No access token found");
+    }
+};
+
+
+const deleteTrash = async (id:string) => {
+    const access_token = localStorage.getItem('jwtToken');
+    console.log(access_token);
+
+    if (access_token) {
+        const config = {
+            headers: { Authorization: `Bearer ${access_token}` },
+        };
+
+        try {
+            const response = await axios.delete(`${trashUrl}${id}`, config);
+            console.log("Order response:", response);
+            return response.data;
+        } catch (error) {
+            console.error("Order failed:", error);
+            throw error;
+        }
+    } else {
+        console.error("No access token found");
+        throw new Error("No access token found");
+    }
+};
+
+
+export default { register, login, logout, orderTrashTakeOut, getAllTrashOrder, getUserProfile, deleteTrash };

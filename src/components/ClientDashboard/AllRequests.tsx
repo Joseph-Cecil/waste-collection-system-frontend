@@ -67,17 +67,23 @@ export function AllRequests() {
 
   return (
     <Container my="md">
-      <Grid>
-        {trashs.map((trash, index) => (
-          <Grid.Col key={index} span={{ base: 12, xs: getColumnSpan(index) }}>
-            <ProfileCard
-              username={trash.user.username}
-              location={trash.location}
-              take_out_date={trash.take_out_date}
-            />
-          </Grid.Col>
-        ))}
-      </Grid>
+      {trashs.length === 0 ? (
+        <Text ta="center" fz="lg" fw={500} mt="sm">
+          Trash Request Empty
+        </Text>
+      ) : (
+        <Grid>
+          {trashs.map((trash, index) => (
+            <Grid.Col key={index} span={{ base: 12, xs: getColumnSpan(index) }}>
+              <ProfileCard
+                username={trash.user.username}
+                location={trash.location}
+                take_out_date={trash.take_out_date}
+              />
+            </Grid.Col>
+          ))}
+        </Grid>
+      )}
     </Container>
   );
 }
