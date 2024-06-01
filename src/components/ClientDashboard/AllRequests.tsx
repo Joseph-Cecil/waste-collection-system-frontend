@@ -1,68 +1,80 @@
-import { Grid, Container, Card, Text, Group } from '@mantine/core';
+import { Grid, Container, Card, Text, Group, Loader } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import api from '../../services/api'; // Import your API module here
 
-interface Profile {
+// Define an interface for the trash data
+interface TrashData {
   id: number;
-  name: string;
-  date: string;
-  items: string[];
+  user: {
+    username: string;
+  };
+  contact: string;
+  location: string;
+  is_delivered: boolean;
+  take_out_date: string;
+  updated_at: string;
 }
 
-const data: Profile[] = [
-  { id: 1, name: "Joshua Smith", date: "24th May, 2024", items: ["Nungua"] },
-  { id: 2, name: "Sam Nana Julius", date: "1st May, 2024", items: ["Accra"] },
-  { id: 3, name: "Bismarck Adicks", date: "5th January, 2024", items: ["Tema"] },
-  { id: 4, name: "Akosua Gyemfi", date: "29th December, 2023", items: ["Tema"] },
-  { id: 5, name: "Bismarck Adicks", date: "24th May, 2024", items: ["Tema"] },
-  { id: 6, name: "Joshua Smith", date: "24th May, 2024", items: ["Nungua"] },
-  { id: 7, name: "Sam Nana Julius", date: "1st May, 2024", items: ["Accra"] },
-  { id: 8, name: "Bismarck Adicks", date: "5th January, 2024", items: ["Tema"] },
-  { id: 9, name: "Akosua Gyemfi", date: "29th December, 2023", items: ["Tema"] },
-  { id: 10, name: "Bismarck Adicks", date: "24th May, 2024", items: ["Tema"] },
-  { id: 11, name: "Joshua Smith", date: "24th May, 2024", items: ["Nungua"] },
-  { id: 12, name: "Sam Nana Julius", date: "1st May, 2024", items: ["Accra"] },
-  { id: 13, name: "Bismarck Adicks", date: "5th January, 2024", items: ["Tema"] },
-  { id: 14, name: "Akosua Gyemfi", date: "29th December, 2023", items: ["Tema"] },
-  { id: 15, name: "Bismarck Adicks", date: "24th May, 2024", items: ["Tema"] },
-  { id: 9, name: "Akosua Gyemfi", date: "29th December, 2023", items: ["Tema"] },
-  { id: 10, name: "Bismarck Adicks", date: "24th May, 2024", items: ["Tema"] },
-  { id: 11, name: "Joshua Smith", date: "24th May, 2024", items: ["Nungua"] },
-  { id: 12, name: "Sam Nana Julius", date: "1st May, 2024", items: ["Accra"] },
-  { id: 13, name: "Bismarck Adicks", date: "5th January, 2024", items: ["Tema"] },
-  { id: 14, name: "Akosua Gyemfi", date: "29th December, 2023", items: ["Tema"] },
-  { id: 15, name: "Bismarck Adicks", date: "24th May, 2024", items: ["Tema"] },
-//   // Add more objects as needed
-];
-
-function ProfileCard({ name, date, items }: Profile) {
+function ProfileCard({ username, location, take_out_date }: { username: string; location: string; take_out_date: string }) {
   return (
     <Card withBorder padding="xl" radius="md">
       <Text ta="center" fz="lg" fw={500} mt="sm">
-        {name}
+        {username}
       </Text>
       <Text ta="center" fz="sm" c="dimmed">
-        {date}
+        {take_out_date}
       </Text>
       <Group mt="md" justify="center" gap={30}>
-        {items.map((item, index) => (
-          <Text key={index}>{item}</Text>
-        ))}
+        {location}
       </Group>
     </Card>
   );
 }
+
 export function AllRequests() {
+  const [trashs, setTrash] = useState<TrashData[]>([]); // Explicitly type trashs
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.getAllTrashOrder();
+        setTrash(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const getColumnSpan = (index: number) => {
-    const pattern = [4, 8, 8, 4, 6, 6, 4, 4, 4]; // Define the repeating pattern
-    const adjustedIndex = index % pattern.length; // Adjust index to fit within the pattern length
-    return pattern[adjustedIndex]; // Get the span value from the pattern
+    const pattern = [4, 8, 8, 4, 6, 6, 4, 4, 4];
+    const adjustedIndex = index % pattern.length;
+    return pattern[adjustedIndex];
   };
+
+  if (loading) {
+    return (
+      <Container my="md">
+        <Loader />
+        <Text>Loading...</Text>
+      </Container>
+    );
+  }
 
   return (
     <Container my="md">
       <Grid>
-        {data.map((profile, index) => (
-          <Grid.Col key={profile.id} span={{ base: 12, xs: getColumnSpan(index) }}>
-            <ProfileCard {...profile} />
+        {trashs.map((trash, index) => (
+          <Grid.Col key={index} span={{ base: 12, xs: getColumnSpan(index) }}>
+            <ProfileCard
+              username={trash.user.username}
+              location={trash.location}
+              take_out_date={trash.take_out_date}
+            />
           </Grid.Col>
         ))}
       </Grid>
