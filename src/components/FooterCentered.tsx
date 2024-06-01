@@ -1,4 +1,4 @@
-import { Anchor, Group, ActionIcon, rem } from '@mantine/core';
+import { Anchor, Group, ActionIcon, rem, Image } from '@mantine/core';
 import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons-react';
 import classes from './FooterCentered.module.css';
 
@@ -27,7 +27,8 @@ export function FooterCentered() {
   return (
     <div className={classes.footer}>
       <div className={classes.inner}>
-        <h2>Logo</h2>
+        <Group>
+        <Image  height={40} src="../../public/ecocyclelogo-Photoroom.png"/></Group>
 
         <Group className={classes.links}>{items}</Group>
 
