@@ -1,13 +1,8 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
 
 
 
-// Define the shape of the decoded JWT
-interface DecodedToken {
-  exp: number; // Expiration time in seconds
-}
 
 // Function to check if the JWT is valid
 const isAuthenticated = (): boolean => {

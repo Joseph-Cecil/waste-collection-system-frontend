@@ -41,7 +41,7 @@ const UpdateForm = () => {
 
   return (
     <>
-      <Paper mt={100} mb={60} radius="md" p="xl" withBorder>
+      <Paper mt={100} mr={20} mb={60} ml={20} radius="md" p="xl" withBorder>
         <Text size="lg" fw={500}>
           Welcome to Eco-Cycle
         </Text>

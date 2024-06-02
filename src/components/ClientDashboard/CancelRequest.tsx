@@ -68,7 +68,7 @@ export function CancelRequest() {
   };
 
   return (
-    <div style={{margin: "0.5rem"}}>
+    <div style={{margin: "1.1rem"}}>
     <Card withBorder padding="xl" radius="md" className={classes.card}>
       <Card.Section
         h={140}
@@ -92,9 +92,10 @@ export function CancelRequest() {
           {lastTrash.location}
         </Text>
       </Group>
-      <Button onClick={handleSubmit} color='#D22B2B' fullWidth radius="md" mt="xl" size="md" >
+      <Group justify='center'>
+      <Button onClick={handleSubmit} color='#D22B2B' fullWidth radius="md" mt="xl" size="md" w={400} >
         Cancel Request
-      </Button>
+      </Button></Group>
     </Card>
     </div>
   );

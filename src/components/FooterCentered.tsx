@@ -28,7 +28,7 @@ export function FooterCentered() {
     <div className={classes.footer}>
       <div className={classes.inner}>
         <Group>
-        <Image  height={40} src="../../public/ecocyclelogo-Photoroom.png"/></Group>
+        <Image  height={40} src="/ecocyclelogo-Photoroom.png"/></Group>
 
         <Group className={classes.links}>{items}</Group>
 

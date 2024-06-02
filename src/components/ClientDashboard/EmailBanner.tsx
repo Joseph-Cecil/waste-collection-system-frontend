@@ -17,6 +17,7 @@ export function EmailBanner() {
 
         <div className={classes.controls}>
           <TextInput
+          mr={10}
             placeholder="Your email"
             classNames={{ input: classes.input, root: classes.inputWrapper }}
           />

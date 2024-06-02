@@ -93,7 +93,7 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
   };
 
   return (
-    <Paper mt={100} radius="md" p="xl" withBorder {...props}>
+    <Paper mt={100} mr={20} mb={50} ml={20} radius="md" p="xl" withBorder {...props}>
       <Text size="lg" fw={500}>
         Welcome to Eco-Cycle, {type} with
       </Text>
