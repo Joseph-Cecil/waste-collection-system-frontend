@@ -43,6 +43,17 @@ export function LastTakeOut() {
     );
   }
 
+
+  if (trashs.length === 0) {
+    return (
+      <Container my="md">
+        <Text ta="center" fz="lg" fw={500} mt="sm">
+          Trash Request Empty
+        </Text>
+      </Container>
+    );
+  }
+
   const lastTrash = trashs[trashs.length - 1]; // Get the last item in the array
 
   return (
