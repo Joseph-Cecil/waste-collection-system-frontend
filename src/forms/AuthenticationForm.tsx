@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useToggle, upperFirst } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
-import  api  from "../services/api";
+import api from "../services/api";
 import {
   TextInput,
   PasswordInput,
@@ -13,9 +13,13 @@ import {
   Divider,
   Checkbox,
   Anchor,
-  Stack
+  Stack,
+  Notification,
+  rem
 } from "@mantine/core";
 import { useNavigate } from "react-router-dom";
+import Loader1 from "../components/Loader1";
+import { IconX, IconCheck } from '@tabler/icons-react';
 
 interface AuthenticationFormProps extends PaperProps {
   path: string;
@@ -38,6 +42,8 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
   });
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState<{ message: string, color: string, icon: React.ReactNode } | null>(null);
 
   useEffect(() => {
     if (path.includes("register")) {
@@ -48,44 +54,49 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
   }, [path, toggle]);
 
   const handleFormSubmit = async () => {
-    if (type === "login") {
-      // Call login API with form values
-      try {
-        // Replace the following with your login API call
-        console.log(form.values.email, form.values.password);
-        await api.login({"email":form.values.email, "password":form.values.password});
-        // console.log("innnnnnnnn ",response)
-        // Assuming successful login, update authentication state
-        setIsLoggedIn(true);
-        navigate("/auth/client-dashboard")
-      } catch (error) {
+    setLoading(true);
+    setNotification(null);
 
+    if (type === "login") {
+      try {
+        await api.login({ "email": form.values.email, "password": form.values.password });
+        setIsLoggedIn(true);
+        setLoading(false);
+        navigate("/auth/client-dashboard");
+      } catch (error) {
+        setLoading(false);
+        setNotification({
+          message: "Login failed. Please try again.",
+          color: "red",
+          icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+        });
         console.error("Login failed:", error);
       }
-      console.log("successful")
     } else {
-      // Call register API with form values
       try {
-        // Replace the following with your register API call
-        const response = await api.register(form.values);
-        console.log("Registering  ", response)
-        // Assuming successful registration, update authentication state
-        // setIsLoggedIn(true);
+        await api.register(form.values);
+        setLoading(false);
+        setNotification({
+          message: "Registration successful! Please log in.",
+          color: "teal",
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        });
         toggle("login");
       } catch (error) {
+        setLoading(false);
+        setNotification({
+          message: "Registration failed. Please try again.",
+          color: "red",
+          icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+        });
         console.error("Registration failed:", error);
       }
     }
   };
 
   const handleLogout = async () => {
-    // Call logout API
     try {
-      // Replace the following with your logout API call
-      console.log("processing logout")
       await api.logout();
-      console.log("LOgining out")
-      // Assuming successful logout, update authentication state
       setIsLoggedIn(false);
     } catch (error) {
       console.error("Logout failed:", error);
@@ -93,93 +104,102 @@ export function AuthenticationForm({ path, ...props }: AuthenticationFormProps) 
   };
 
   return (
-    <Paper mt={100} mr={20} mb={50} ml={20} radius="md" p="xl" withBorder {...props}>
-      <Text size="lg" fw={500}>
-        Welcome to Eco-Cycle, {type} with
-      </Text>
+    <>
+      <Loader1 visible={loading} />
+      <Paper mt={100} mr={20} mb={50} ml={20} radius="md" p="xl" withBorder {...props}>
+        <Text size="lg" fw={500}>
+          Welcome to Eco-Cycle, {type} with
+        </Text>
 
-      <Divider labelPosition="center" my="lg" />
+        <Divider labelPosition="center" my="lg" />
 
-      {!isLoggedIn && (
-        <form onSubmit={form.onSubmit(handleFormSubmit)}>
-          <Stack>
-            {type === "register" && (
-              <>
-                <TextInput
-                  required
-                  label="Username"
-                  placeholder="Enter Your Username Here"
-                  value={form.values.username}
-                  onChange={(event) =>
-                    form.setFieldValue("username", event.currentTarget.value)
-                  }
-                  radius="md"
-                />
-              </>
-            )}
+        {notification && (
+          <Notification icon={notification.icon} color={notification.color} title={notification.color === 'red' ? 'Bummer!' : 'All good!'} mt="md">
+            {notification.message}
+          </Notification>
+        )}
 
-            <TextInput
-              required
-              label="Email"
-              placeholder="hello@mantine.dev"
-              value={form.values.email}
-              onChange={(event) =>
-                form.setFieldValue("email", event.currentTarget.value)
-              }
-              error={form.errors.email && "Invalid email"}
-              radius="md"
-            />
+        {!isLoggedIn && (
+          <form onSubmit={form.onSubmit(handleFormSubmit)}>
+            <Stack>
+              {type === "register" && (
+                <>
+                  <TextInput
+                    required
+                    label="Username"
+                    placeholder="Enter Your Username Here"
+                    value={form.values.username}
+                    onChange={(event) =>
+                      form.setFieldValue("username", event.currentTarget.value)
+                    }
+                    radius="md"
+                  />
+                </>
+              )}
 
-            <PasswordInput
-              required
-              label="Password"
-              placeholder="Your password"
-              value={form.values.password}
-              onChange={(event) =>
-                form.setFieldValue("password", event.currentTarget.value)
-              }
-              error={
-                form.errors.password &&
-                "Password should include at least 6 characters"
-              }
-              radius="md"
-            />
-
-            {type === "register" && (
-              <Checkbox
-                label="I accept terms and conditions"
-                checked={true}
+              <TextInput
+                required
+                label="Email"
+                placeholder="hello@mantine.dev"
+                value={form.values.email}
                 onChange={(event) =>
-                  form.setFieldValue("terms", event.currentTarget.checked)
+                  form.setFieldValue("email", event.currentTarget.value)
                 }
+                error={form.errors.email && "Invalid email"}
+                radius="md"
               />
-            )}
-          </Stack>
 
-          <Group justify="space-between" mt="xl">
-            <Anchor
-              component="button"
-              type="button"
-              c="dimmed"
-              onClick={() => toggle()}
-              size="xs"
-            >
-              {type === "register"
-                ? "Already have an account? Login"
-                : "Don't have an account? Register"}
-            </Anchor>
-            <Button type="submit" radius="xl">
-              {upperFirst(type)}
-            </Button>
-          </Group>
-        </form>
-      )}
+              <PasswordInput
+                required
+                label="Password"
+                placeholder="Your password"
+                value={form.values.password}
+                onChange={(event) =>
+                  form.setFieldValue("password", event.currentTarget.value)
+                }
+                error={
+                  form.errors.password &&
+                  "Password should include at least 6 characters"
+                }
+                radius="md"
+              />
 
-      {isLoggedIn && (
-        <Button onClick={handleLogout} radius="xl">
-          Logout
-        </Button>
-      )}
-    </Paper>
+              {type === "register" && (
+                <Checkbox
+                  label="I accept terms and conditions"
+                  checked={true}
+                  onChange={(event) =>
+                    form.setFieldValue("terms", event.currentTarget.checked)
+                  }
+                />
+              )}
+            </Stack>
+
+            <Group justify="space-between" mt="xl">
+              <Anchor
+                component="button"
+                type="button"
+                c="dimmed"
+                onClick={() => toggle()}
+                size="xs"
+              >
+                {type === "register"
+                  ? "Already have an account? Login"
+                  : "Don't have an account? Register"}
+              </Anchor>
+              <Button type="submit" radius="xl">
+                {upperFirst(type)}
+              </Button>
+            </Group>
+          </form>
+        )}
+
+        {isLoggedIn && (
+          <Button onClick={handleLogout} radius="xl">
+            Logout
+          </Button>
+        )}
+      </Paper>
+    </>
   );
 }

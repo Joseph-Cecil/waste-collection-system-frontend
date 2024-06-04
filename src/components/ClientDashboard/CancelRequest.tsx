@@ -1,7 +1,8 @@
-import { Card, Avatar, Text, Group, Button, Container, Loader } from '@mantine/core';
+import { Card, Avatar, Text, Group, Button, Container } from '@mantine/core';
 import classes from './UserCardImage.module.css';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
+import Loader1 from '../Loader1';
 
 
 interface TrashData {
@@ -38,8 +39,7 @@ export function CancelRequest() {
   if (loading) {
     return (
       <Container my="md">
-        <Loader />
-        <Text>Loading...</Text>
+<Loader1 visible={loading} />
       </Container>
     );
   }

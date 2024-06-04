@@ -1,24 +1,15 @@
-import {
-  Button,
-  Divider,
-  Group,
-  Paper,
-  PaperProps,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useState } from "react";
+import { Button, Divider, Group, Paper, Stack, Text, TextInput, Notification, rem } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import { DateInput } from "@mantine/dates";
+import { IconX, IconCheck } from '@tabler/icons-react';
 import api from "../services/api";
-
-interface SpecialRequest extends PaperProps {
-  path: string;
-}
+import Loader1 from "./Loader1"; // Ensure the correct import path
 
 const SpecialRequest = () => {
   const [value, setValue] = useState<Date | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState<{ message: string, color: string, icon: React.ReactNode } | null>(null);
 
   const form = useForm({
     initialValues: {
@@ -35,8 +26,39 @@ const SpecialRequest = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const handleSubmit = async () => {
+    const date = formatDate(value);
+    setLoading(true);
+    setNotification(null);
+
+    try {
+      const res = await api.orderTrashTakeOut({ "take_out_date": date, "location": form.values.location, "contact": form.values.contact });
+      console.log(res);
+
+      setTimeout(() => {
+        setLoading(false);
+        form.reset();
+        setValue(null);
+        setNotification({
+          message: "Your request has been placed successfully!",
+          color: "teal",
+          icon: <IconCheck style={{ width: rem(20), height: rem(20) }} />,
+        });
+      }, 2000);
+    } catch (e) {
+      console.log("error something went wrong", e);
+      setLoading(false);
+      setNotification({
+        message: "Something went wrong",
+        color: "red",
+        icon: <IconX style={{ width: rem(20), height: rem(20) }} />,
+      });
+    }
+  };
+
   return (
     <>
+      <Loader1 visible={loading} />
       <Paper mt={100} mb={60} radius="md" p="xl" withBorder>
         <Text size="lg" fw={500}>
           Welcome to Eco-Cycle
@@ -44,20 +66,13 @@ const SpecialRequest = () => {
 
         <Divider labelPosition="center" my="lg" />
 
-        <form
-          onSubmit={form.onSubmit(async() => {
-            const date = formatDate(value)
-            console.log(date, form.values.location, form.values.contact);
-            try{
-              const res = await api.orderTrashTakeOut({"take_out_date":date, "location":form.values.location, "contact":form.values.contact});
-              console.log(res);
+        {notification && (
+          <Notification icon={notification.icon} color={notification.color} title={notification.color === 'red' ? 'Bummer!' : 'Success!'} mt="md">
+            {notification.message}
+          </Notification>
+        )}
 
-            }catch(e){
-              console.log("error something went wrong", e)
-            }
-
-          })}
-        >
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack>
             <TextInput
               required

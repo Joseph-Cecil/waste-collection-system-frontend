@@ -1,7 +1,8 @@
-import { ActionIcon, RingProgress, Text, Center, rem, Container, Loader } from '@mantine/core';
+import { ActionIcon, RingProgress, Text, Center, rem, Container } from '@mantine/core';
 import { IconCheck } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import api from '../services/api';
+import Loader1 from './Loader1';
 
 // Define an interface for the trash data
 interface TrashData {
@@ -39,8 +40,7 @@ const SpecialTakeoutStatus = () => {
   if (loading) {
     return (
       <Container my="md">
-        <Loader />
-        <Text>Loading...</Text>
+<Loader1 visible={loading} />
       </Container>
     );
   }

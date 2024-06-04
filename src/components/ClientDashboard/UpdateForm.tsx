@@ -1,6 +1,7 @@
-import { Container, Divider, Group, Loader, Paper, Text } from '@mantine/core';
+import { Container, Divider, Group, Paper, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
+import Loader1 from '../Loader1';
 
 interface UserData {
 
@@ -31,13 +32,10 @@ const UpdateForm = () => {
   if (loading) {
     return (
       <Container my="md">
-        <Loader />
-        <Text>Loading...</Text>
+        <Loader1 visible={loading} />
       </Container>
     );
   }
-
-
 
   return (
     <>
@@ -50,13 +48,12 @@ const UpdateForm = () => {
 
         <Group>
           <Text><b>Username:</b> {profile?.username}</Text>
-
         </Group>
 
         <Divider labelPosition="center" my="lg"/>
 
         <Group>
-        <Text style={{ whiteSpace: 'pre-wrap' }}><b>Email:</b> {profile?.email}</Text>
+          <Text style={{ whiteSpace: 'pre-wrap' }}><b>Email:</b> {profile?.email}</Text>
         </Group>
       </Paper>
     </>
@@ -64,3 +61,4 @@ const UpdateForm = () => {
 };
 
 export default UpdateForm;
+

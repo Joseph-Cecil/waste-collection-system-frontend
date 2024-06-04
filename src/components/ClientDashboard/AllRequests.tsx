@@ -1,6 +1,7 @@
-import { Grid, Container, Card, Text, Group, Loader } from '@mantine/core';
+import { Grid, Container, Card, Text, Group } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import api from '../../services/api'; // Import your API module here
+import Loader1 from '../Loader1';
 
 // Define an interface for the trash data
 interface TrashData {
@@ -59,8 +60,7 @@ export function AllRequests() {
   if (loading) {
     return (
       <Container my="md">
-        <Loader />
-        <Text>Loading...</Text>
+        <Loader1 visible={loading} />
       </Container>
     );
   }

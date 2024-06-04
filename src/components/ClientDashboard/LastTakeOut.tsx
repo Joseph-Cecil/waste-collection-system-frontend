@@ -1,6 +1,7 @@
-import { Button, Paper, Text, Group, Container, Loader } from '@mantine/core';
+import { Button, Paper, Text, Group, Container } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import api from '../../services/api';
+import Loader1 from '../Loader1';
 
 // Define an interface for the trash data
 interface TrashData {
@@ -37,8 +38,7 @@ export function LastTakeOut() {
   if (loading) {
     return (
       <Container my="md">
-        <Loader />
-        <Text>Loading...</Text>
+<Loader1 visible={loading} />
       </Container>
     );
   }
