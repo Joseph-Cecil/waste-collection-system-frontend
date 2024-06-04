@@ -14,14 +14,38 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import classes from "./HeaderMegaMenu.module.css";
 import LightAndDarkTheme from "./LightAndDarkTheme";
+import api from "../services/api"; // Make sure to import your api
 
 export function HeaderMegaMenu() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const theme = useMantineTheme();
   const { colorScheme } = useMantineColorScheme();
+
+  // Manage authentication state
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Check local storage for jwtToken on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await api.logout();
+      localStorage.removeItem("jwtToken");
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   const linkStyles = {
     color: colorScheme === "dark" ? theme.colors.gray[0] : theme.colors.dark[9],
@@ -62,18 +86,20 @@ export function HeaderMegaMenu() {
             </a>
           </Group>
           <Group visibleFrom="sm">
-            <Link to="/auth">
-              <Button variant="default">Log in</Button>
-            </Link>
-            <Link to="/auth/register">
-              <Button>Sign up</Button>
-            </Link>
+            {isLoggedIn ? (
+              <Button onClick={handleLogout}>Logout</Button>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="default">Log in</Button>
+                </Link>
+                <Link to="/auth/register">
+                  <Button>Sign up</Button>
+                </Link>
+              </>
+            )}
           </Group>
-          <Burger
-            opened={drawerOpened}
-            onClick={toggleDrawer}
-            hiddenFrom="sm"
-          />
+          <Burger opened={drawerOpened} onClick={toggleDrawer} hiddenFrom="sm" />
         </Group>
       </header>
       <Box style={{ flex: "1 0 auto", overflow: "auto" }}>
@@ -100,15 +126,20 @@ export function HeaderMegaMenu() {
             <a href="/vision" className={classes.link} style={linkStyles}>
               Our Vision
             </a>
-
             <Divider my="sm" />
             <Group justify="center" pb="xl" px="md">
-              <Link to="/auth">
-                <Button variant="default">Log in</Button>
-              </Link>
-              <Link to="/auth/register">
-                <Button>Sign up</Button>
-              </Link>
+              {isLoggedIn ? (
+                <Button onClick={handleLogout}>Logout</Button>
+              ) : (
+                <>
+                  <Link to="/auth">
+                    <Button variant="default">Log in</Button>
+                  </Link>
+                  <Link to="/auth/register">
+                    <Button>Sign up</Button>
+                  </Link>
+                </>
+              )}
             </Group>
           </ScrollArea>
         </Drawer>

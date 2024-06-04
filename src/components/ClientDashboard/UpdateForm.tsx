@@ -43,18 +43,20 @@ const UpdateForm = () => {
     <>
       <Paper mt={100} mr={20} mb={60} ml={20} radius="md" p="xl" withBorder>
         <Text size="lg" fw={500}>
-          Welcome to Eco-Cycle
+          Welcome to Eco-Cycle Profile Page
         </Text>
 
         <Divider labelPosition="center" my="lg" />
 
         <Group>
-          <Text>Username: {profile?.username}</Text>
+          <Text><b>Username:</b> {profile?.username}</Text>
 
         </Group>
 
+        <Divider labelPosition="center" my="lg"/>
+
         <Group>
-        <Text style={{ whiteSpace: 'pre-wrap' }}>Email: {profile?.email}</Text>
+        <Text style={{ whiteSpace: 'pre-wrap' }}><b>Email:</b> {profile?.email}</Text>
         </Group>
       </Paper>
     </>
